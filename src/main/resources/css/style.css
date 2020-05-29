@@ -1,0 +1,151 @@
+#title-pane {
+    -fx-background-color: #2D75E8;
+}
+
+#start_pause {
+    -fx-text-fill: green;
+    -fx-background-color: white;
+    -fx-background-radius: 80;
+    -fx-border-radius: 80;
+}
+
+#start_pause:hover {
+    -fx-background-color: #C0D5F7;
+}
+
+#start_pause:pressed {
+    -fx-text-fill: red;
+    -fx-background-color: #73A3EF;
+}
+
+.button {
+    -fx-background-color: #FFF;
+    -fx-background-radius: 0;
+    -fx-border-radius-radius: 0;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #C0D5F7;
+}
+
+.button:pressed {
+    -fx-cursor: hand;
+    -fx-background-color: #73A3EF;
+}
+
+#available {
+    -fx-background-color: #5CB55B;
+}
+
+#busy {
+    -fx-background-color: #D7534B;
+}
+
+#away {
+    -fx-background-color: #EEAC4C;
+}
+
+#offline {
+    -fx-background-color: #d9e3ff;
+}
+
+#genderChart, #countryChart {
+    -fx-background-color: white;
+}
+
+#new {
+    -fx-background-color: #2D75E8;
+}
+
+#update {
+    -fx-background-color: #5CB55B;
+}
+
+#delete {
+    -fx-background-color: #D7534B;
+}
+
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: #2D75E8;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view .cell {
+    -fx-cell-size: 35;
+    -fx-alignment: center;
+    /*-fx-background-color: #C0D5F7;*/
+    /*-fx-border-color: #2D75E8;*/
+    -fx-text-fill: #2D75E8;
+    -fx-alignment: CENTER;
+
+}
+
+.table-row-cell:selected {
+    /*-fx-background-color: #f5f5f5;*/
+    -fx-background-color: #73A3EF;
+    /*-fx-background-color: steelblue;*/
+    -fx-text-fill: white;
+
+
+}
+
+/* scroll bar starts here */
+
+/* The increment and decrement button CSS class of scrollbar */
+.table-view .increment-button, .table-view .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 2em;
+
+}
+
+/* The main scrollbar **track** CSS class  */
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: derive(#2D75E8, 80%);
+
+    -fx-background-radius: 2em;
+    -fx-border-radius: 2em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(#2D75E8, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
+}
+
+/* chart properties */
+
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+    -fx-legend-visible: true;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-pie {
+    -fx-border-color: derive(-fx-pie-color, 1%);
+    -fx-border-width: 0px;
+}
+
+#buttons-blue {
+    -fx-background-color: #0078D4;
+    -fx-background-radius: 20;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER;
+}
+
