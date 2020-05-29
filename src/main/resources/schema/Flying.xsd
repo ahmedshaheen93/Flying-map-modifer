@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="GathererProfile" type="GathererProfileType"/>
+    <xs:complexType name="Vector3Type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:double" name="X" use="required"/>
+                <xs:attribute type="xs:double" name="Y" use="required"/>
+                <xs:attribute type="xs:double" name="Z" use="required"/>
+                <xs:attribute type="xs:string" name="Type" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="Vectors3Type">
+        <xs:sequence>
+            <xs:element type="Vector3Type" name="Vector3" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PositionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="X" use="optional"/>
+                <xs:attribute type="xs:string" name="Y" use="optional"/>
+                <xs:attribute type="xs:string" name="Z" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="GathererBlackListRadiusType">
+        <xs:sequence>
+            <xs:element type="PositionType" name="Position"/>
+            <xs:element type="xs:string" name="Radius"/>
+            <xs:element type="xs:string" name="Continent"/>
+            <xs:element type="xs:string" name="TypeArea"/>
+            <xs:element type="xs:string" name="Comment"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="BlackListRadiusType">
+        <xs:sequence>
+            <xs:element type="GathererBlackListRadiusType" name="GathererBlackListRadius" maxOccurs="unbounded"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GathererProfileType">
+        <xs:sequence>
+            <xs:element type="Vectors3Type" name="Vectors3"/>
+            <xs:element type="xs:string" name="Npc"/>
+            <xs:element type="BlackListRadiusType" name="BlackListRadius"/>
+            <xs:element type="xs:string" name="GatherEntry"/>
+            <xs:element type="xs:string" name="NotLoop"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
