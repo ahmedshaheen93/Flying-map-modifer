@@ -2,7 +2,7 @@ package com.shaheen.contoller;
 
 import com.shaheen.model.GathererProfileType;
 import com.shaheen.model.Vector3Type;
-import com.shaheen.utiles.ReadXml;
+import com.shaheen.utiles.ReadWriteXmlJXB;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -22,15 +22,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainViewController implements Initializable {
     @FXML
@@ -55,7 +59,8 @@ public class MainViewController implements Initializable {
 
 
     private Stage stage;
-    private ReadXml readXml = new ReadXml();
+    private ReadWriteXmlJXB readWriteXmlJXB = new ReadWriteXmlJXB();
+    private GathererProfileType gathererProfile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,10 +72,12 @@ public class MainViewController implements Initializable {
         final File xmlFile = chooseXmlFile();
         if (xmlFile != null) {
             filePathTextField.setText(xmlFile.getAbsolutePath());
+            vector3TypeList.clear();
             new Thread(() -> {
                 try {
-                    JAXBElement rootElement = readXml.readXmlFileRootElement(xmlFile);
-                    GathererProfileType gathererProfile = (GathererProfileType) rootElement.getValue();
+                    JAXBElement rootElement = readWriteXmlJXB.readXmlFileRootElement(xmlFile);
+                    gathererProfile = (GathererProfileType) rootElement.getValue();
+
                     handelTableView(gathererProfile);
                 } catch (JAXBException e) {
                     e.printStackTrace();
@@ -78,6 +85,27 @@ public class MainViewController implements Initializable {
                 }
             }).start();
         }
+    }
+
+    @FXML
+    public void saveCurrentFile(ActionEvent actionEvent) {
+        AtomicReference<File> saveXmlFile = new AtomicReference<>(saveXmlFile());
+        gathererProfile.getVectors3().getVector3().clear();
+        vector3TypeList.forEach(vector3Type -> {
+            gathererProfile.getVectors3().getVector3().add(vector3Type);
+        });
+        Platform.runLater(() -> {
+                    if (!FilenameUtils.getExtension(saveXmlFile.get().getName()).equalsIgnoreCase("xml")) {
+                        saveXmlFile.set(new File(saveXmlFile.toString() + ".xml"));  // append .xml if "foo.jpg.xml" is OK
+                        saveXmlFile.set(new File(saveXmlFile.get().getParentFile(), FilenameUtils.getBaseName(saveXmlFile.get().getName()) + ".xml")); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+                    }
+                    try {
+                        readWriteXmlJXB.writeXmlFile(saveXmlFile.get(), gathererProfile);
+                    } catch (JAXBException | FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
     }
 
     private void handelTableView(GathererProfileType gathererProfile) {
@@ -130,14 +158,7 @@ public class MainViewController implements Initializable {
     }
 
     private File chooseXmlFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("choose xml file");
-        // Set extension filter
-        FileChooser.ExtensionFilter extFilter =
-                new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
-        String userHomePath = System.getProperties().getProperty("user.home");
-        fileChooser.setInitialDirectory(new File(userHomePath));
+        FileChooser fileChooser = createFileChooser("choose xml file");
         return fileChooser.showOpenDialog(stage);
     }
 
@@ -151,8 +172,10 @@ public class MainViewController implements Initializable {
             if (selectedIndex >= 0) {
                 Vector3Type vector3Type = vector3TypeList.get(selectedIndex);
                 Vector3Type modified = viewSelectedValue(vector3Type);
-                vector3TypeList.set(selectedIndex, modified);
-                flyingTable.refresh();
+                if (modified != null) {
+                    vector3TypeList.set(selectedIndex, modified);
+                    flyingTable.refresh();
+                }
             }
         }
     }
@@ -166,12 +189,51 @@ public class MainViewController implements Initializable {
             Stage stage = new Stage();
             controller.setStage(stage);
             controller.setVector3Type(vector3Type);
+            stage.setResizable(true);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(this.stage);
             stage.setScene(new Scene(root));
-            stage.show();
-            return controller.getVector3Type();
+            stage.showAndWait();
+            if (controller.getConfirmType().equals(ConfirmType.OK)) {
+                return controller.getVector3Type();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private File saveXmlFile() {
+        FileChooser fileChooser = createFileChooser("Save xml file");
+        return fileChooser.showSaveDialog(stage);
+    }
+
+    private FileChooser createFileChooser(String tile) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(tile);
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        String userHomePath = System.getProperties().getProperty("user.home");
+        fileChooser.setInitialDirectory(new File(userHomePath));
+        return fileChooser;
+    }
+
+
+    public void newAction(ActionEvent actionEvent) {
+
+    }
+
+    public void updateAction(ActionEvent actionEvent) {
+
+    }
+
+    public void deleteAction(ActionEvent actionEvent) {
+
+    }
+
+    public void insertAction(ActionEvent actionEvent) {
+
     }
 }

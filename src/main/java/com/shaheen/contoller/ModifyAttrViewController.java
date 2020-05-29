@@ -5,7 +5,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -21,11 +24,11 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
     @FXML
     private Label messageTitleLabel;
     @FXML
-    private Spinner<Double> x;
+    private TextField x;
     @FXML
-    private Spinner<Double> y;
+    private TextField y;
     @FXML
-    private Spinner<Double> z;
+    private TextField z;
     @FXML
     private TextField type;
 
@@ -35,9 +38,9 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
 
     @FXML
     public void onOkAction(ActionEvent actionEvent) {
-        vector3Type.setX(x.getValue());
-        vector3Type.setY(y.getValue());
-        vector3Type.setZ(z.getValue());
+        vector3Type.setX(Double.parseDouble(x.getText()));
+        vector3Type.setY(Double.parseDouble(y.getText()));
+        vector3Type.setZ(Double.parseDouble(z.getText()));
         vector3Type.setType(type.getText());
         stage.close();
     }
@@ -67,9 +70,9 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
 
         Platform.runLater(() -> {
             if (vector3Type != null) {
-                x.getValueFactory().setValue(vector3Type.getX());
-                y.getValueFactory().setValue(vector3Type.getY());
-                z.getValueFactory().setValue(vector3Type.getZ());
+                x.setText("" + vector3Type.getX());
+                y.setText("" + vector3Type.getY());
+                z.setText("" + vector3Type.getZ());
                 type.setText(vector3Type.getType());
             }
         });
@@ -82,22 +85,17 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        setSpinnerViewProp(x);
-        setSpinnerViewProp(y);
-        setSpinnerViewProp(z);
-
+        setTextProp(x);
+        setTextProp(y);
+        setTextProp(z);
 
     }
 
-    private void setSpinnerViewProp(Spinner<Double> spinner) {
-        SpinnerValueFactory<Double> valueFactory = getValueFactory();
+    private void setTextProp(TextField textField) {
         StringConverter<Double> doubleStringConverter = getDoubleStringConverter();
-        spinner.setValueFactory(valueFactory);
-        spinner.setEditable(true);
-        valueFactory.setConverter(doubleStringConverter);
-        spinner.getEditor().setTextFormatter(new TextFormatter<>(doubleStringConverter, 0.0, getFilter()));
-
+        textField.setTextFormatter(new TextFormatter<>(doubleStringConverter, 0.0, getFilter()));
     }
+
 
     private StringConverter<Double> getDoubleStringConverter() {
         return new StringConverter<Double>() {
@@ -112,7 +110,7 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
                 if (string.isEmpty() || ".".equals(string) || "-".equals(string) || "-.".equals(string)) {
                     return 0.0;
                 } else {
-                    return new Double(string);
+                    return Double.parseDouble(string);
                 }
             }
 
@@ -129,11 +127,6 @@ public class ModifyAttrViewController extends DialogPane implements Initializabl
             }
             return null;
         };
-
-    }
-
-    private SpinnerValueFactory<Double> getValueFactory() {
-        return new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.MIN_VALUE, Double.MAX_VALUE, 0.0, 0.0001);
 
     }
 

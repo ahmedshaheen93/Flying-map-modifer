@@ -51,12 +51,12 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Spinner fx:id="x"
-                                 GridPane.columnIndex="0" GridPane.rowIndex="1" editable="true"/>
+                        <TextField fx:id="x"
+                                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
 
-                        <Spinner fx:id="y" GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true"/>
+                        <TextField fx:id="y" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Spinner fx:id="z" GridPane.columnIndex="2" GridPane.rowIndex="1" editable="true"/>
+                        <TextField fx:id="z" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
 
                         <TextField fx:id="type" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                     </children>
