@@ -91,23 +91,26 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void saveCurrentFile(ActionEvent actionEvent) {
-        AtomicReference<File> saveXmlFile = new AtomicReference<>(saveXmlFile());
-        gathererProfile.getVectors3().getVector3().clear();
-        vector3TypeList.forEach(vector3Type -> {
-            gathererProfile.getVectors3().getVector3().add(vector3Type);
-        });
-        Platform.runLater(() -> {
-                    if (!FilenameUtils.getExtension(saveXmlFile.get().getName()).equalsIgnoreCase("xml")) {
-                        saveXmlFile.set(new File(saveXmlFile.toString() + ".xml"));  // append .xml if "foo.jpg.xml" is OK
-                        saveXmlFile.set(new File(saveXmlFile.get().getParentFile(), FilenameUtils.getBaseName(saveXmlFile.get().getName()) + ".xml")); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+        File file = chooseSaveXmlFileLocation();
+        if (file != null) {
+            AtomicReference<File> saveXmlFile = new AtomicReference<>(file);
+            gathererProfile.getVectors3().getVector3().clear();
+            vector3TypeList.forEach(vector3Type -> {
+                gathererProfile.getVectors3().getVector3().add(vector3Type);
+            });
+            Platform.runLater(() -> {
+                        if (!FilenameUtils.getExtension(saveXmlFile.get().getName()).equalsIgnoreCase("xml")) {
+                            saveXmlFile.set(new File(saveXmlFile.toString() + ".xml"));  // append .xml if "foo.jpg.xml" is OK
+                            saveXmlFile.set(new File(saveXmlFile.get().getParentFile(), FilenameUtils.getBaseName(saveXmlFile.get().getName()) + ".xml")); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+                        }
+                        try {
+                            readWriteXmlJXB.writeXmlFile(saveXmlFile.get(), gathererProfile);
+                        } catch (JAXBException | FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    try {
-                        readWriteXmlJXB.writeXmlFile(saveXmlFile.get(), gathererProfile);
-                    } catch (JAXBException | FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+            );
+        }
     }
 
     private void handelTableView(GathererProfileType gathererProfile) {
@@ -205,7 +208,7 @@ public class MainViewController implements Initializable {
         return null;
     }
 
-    private File saveXmlFile() {
+    private File chooseSaveXmlFileLocation() {
         FileChooser fileChooser = createFileChooser("Save xml file");
         return fileChooser.showSaveDialog(stage);
     }
@@ -265,5 +268,10 @@ public class MainViewController implements Initializable {
         webEngine.load(getClass().getResource("/templates/myCv.html").toString());
         Scene scene = new Scene(webView);
         loadStage(scene, Modality.WINDOW_MODAL);
+    }
+
+    @FXML
+    public void closeApp(ActionEvent actionEvent) {
+        System.exit(0);
     }
 }
