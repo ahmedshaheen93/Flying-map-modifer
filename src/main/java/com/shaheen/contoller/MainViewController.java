@@ -21,6 +21,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -235,5 +237,33 @@ public class MainViewController implements Initializable {
 
     public void insertAction(ActionEvent actionEvent) {
 
+    }
+
+    public void onAbout(ActionEvent actionEvent) {
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/templates/About.fxml"));
+        try {
+            Parent root = loader.load();
+            loadStage(new Scene(root), Modality.WINDOW_MODAL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadStage(Scene scene, Modality modality) {
+        Stage stage = new Stage();
+        stage.setResizable(true);
+        stage.initModality(modality);
+        stage.initOwner(this.stage);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    public void onAboutMe(ActionEvent actionEvent) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        webEngine.setUserStyleSheetLocation(getClass().getResource("/css/myprofile.css").toString());
+        webEngine.load(getClass().getResource("/templates/myCv.html").toString());
+        Scene scene = new Scene(webView);
+        loadStage(scene, Modality.WINDOW_MODAL);
     }
 }

@@ -18,9 +18,11 @@ public class App extends Application {
 //        serverController.setServerController(controller);
 //        controller.setServerController(serverController);
         controller.setStage(stage);
+        stage.setTitle("Flying map modifier");
         stage.setScene(new Scene(root));
         stage.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }

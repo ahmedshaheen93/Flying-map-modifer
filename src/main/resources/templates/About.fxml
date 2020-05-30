@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="238.0" prefWidth="761.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.shaheen.contoller.AboutViewController">
+    <children>
+        <TextArea fx:id="textAreaAbout" editable="false" layoutX="26.0" layoutY="14.0" prefHeight="166.0"
+                  prefWidth="715.0" wrapText="true">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextArea>
+        <Hyperlink fx:id="appHyperlink" layoutX="26.0" layoutY="190.0" onAction="#openBrowser" text="Source Code"/>
+    </children>
+</AnchorPane>
